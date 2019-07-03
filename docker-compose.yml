@@ -21,3 +21,4 @@ services:
       - mysql:mysql
     volumes:
       - ./wp:/var/www/html
+      - ./sql:/sql
