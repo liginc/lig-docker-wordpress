@@ -71,6 +71,12 @@ PHP
             done
             unset "TEMP_WP_PLUGIN"
         fi
+
+        #Activate theme"
+        if [[ -z "${WP_THEME_NAME}" ]] && [ -e ${WP_THEME_NAME} ]; then
+            echo &>2 "Activating Theme..."
+            wp theme activate ${WP_THEME_NAME} --path=${WP_ROOT} --allow-root
+        fi
     else
         echo >&2 "The Project seems to be already started."
 
@@ -91,12 +97,6 @@ PHP
     rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
 else
 	echo >&2 "Wordpress seems to be installed."
-fi
-
-# Activate theme
-if $(wp theme is-installed twentynineteen --allow-root); then
-    wp theme activate ${WP_THEME_NAME} --path=${WP_ROOT} --allow-root
-
 fi
 
 envs=(
