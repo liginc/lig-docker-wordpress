@@ -35,8 +35,8 @@ RUN curl -sSL -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/w
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-COPY scripts/wait-for-it.sh /usr/local/bin/
-COPY scripts/docker-entrypoint.sh /usr/local/bin/
+COPY wait-for-it.sh /usr/local/bin/
+COPY docker-entrypoint.sh /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh

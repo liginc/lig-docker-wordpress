@@ -12,7 +12,7 @@ services:
   web:
     env_file: docker.env
     build:
-      context: .
+      context: ./docker
     depends_on:
       - mysql
     ports:
