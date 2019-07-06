@@ -2,17 +2,20 @@ version: '3'
 
 services:
   mysql:
-    env_file: docker.env
-    image: mysql:5.7
+    env_file: .env
+    image: mysql:${MYSQL_VER}
+    command: "--default-authentication-plugin=mysql_native_password"
     ports:
       - 3306:3306
     volumes:
       - ./sql:/docker-entrypoint-initdb.d:rw
 
   web:
-    env_file: docker.env
+    env_file: .env
     build:
       context: ./docker
+      args:
+        PHP_VER: ${PHP_VER}
     depends_on:
       - mysql
     ports:
