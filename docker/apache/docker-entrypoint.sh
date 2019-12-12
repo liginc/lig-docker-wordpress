@@ -54,7 +54,7 @@ PHP
         wp option update default_ping_status 'closed' --allow-root
         wp option update default_comment_status 'closed' --allow-root
         wp comment delete 1 --force --allow-root
-        wp post delete 1 2 3 4 --force --allow-root
+        wp post delete 1 2 3 --force --allow-root
 
         # Install extra plugins specified by $WP_INSTALL_PLUGINS
         if [[ -z "${WP_INSTALL_PLUGINS}" ]]; then
@@ -70,6 +70,27 @@ PHP
                 fi
             done
             unset "TEMP_WP_PLUGIN"
+        fi
+
+        if $(wp plugin is-installed wordpress-seo --path=${WP_ROOT} --allow-root); then
+            echo "Update yoast options";
+            YOAST_OPTION=$(wp option get wpseo --format=json --allow-root | \
+            sed -n '$p' | \
+            sed 's/"keyword_analysis_active":true/"keyword_analysis_active":false/' | \
+            sed 's/"content_analysis_active":true/"content_analysis_active":false/' | \
+            sed 's/"enable_cornerstone_content":true/"enable_cornerstone_content":false/' | \
+            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/' | \
+            sed 's/"enable_xml_sitemap":true/"enable_xml_sitemap":false/' | \
+            sed 's/"onpage_indexability":true/"onpage_indexability":false/' | \
+            sed 's/"enable_admin_bar_menu":true/"enable_admin_bar_menu":false/' | \
+            sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
+            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
+            wp option update wpseo $YOAST_OPTION --format=json --allow-root
+        fi
+
+        if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
+            echo "Update ewww image optimize options";
+            wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
         fi
 
         #Activate theme"

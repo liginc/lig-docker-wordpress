@@ -3,8 +3,10 @@ version: '3'
 services:
   mysql:
     env_file: .env
-    image: mysql:${MYSQL_VER}
-    command: "--default-authentication-plugin=mysql_native_password"
+    build:
+      context: ./docker/mysql
+      args:
+        MYSQL_VER: ${MYSQL_VER}
     ports:
       - 3306:3306
     volumes:
@@ -13,7 +15,7 @@ services:
   web:
     env_file: .env
     build:
-      context: ./docker
+      context: ./docker/apache
       args:
         PHP_VER: ${PHP_VER}
     depends_on:
