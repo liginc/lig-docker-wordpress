@@ -10,6 +10,7 @@ RUN set -ex; \
     libpng-dev \
     libmagickwand-dev \
     imagemagick \
+    mysql-client \
   ; \
   pecl install imagick; \
   docker-php-ext-enable imagick; \

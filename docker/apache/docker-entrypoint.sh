@@ -53,9 +53,18 @@ PHP
         wp option update blog_public '0' --allow-root
         wp option update default_ping_status 'closed' --allow-root
         wp option update default_comment_status 'closed' --allow-root
-        wp comment delete 1 --force --allow-root
-        wp post delete 1 2 3 --force --allow-root
-        wp term delete category 1 -- allow-root
+
+        #Truncate tables
+        echo >&2 "Initializing tables..."
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}posts;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}postmeta;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}links;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}comments;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}commentmeta;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}terms;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}termmeta;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}term_taxonomy;" --allow-root
+        wp db query "TRUNCATE table ${WP_DB_PREFIX}term_relationships;" --allow-root
 
         # Install extra plugins specified by $WP_INSTALL_PLUGINS
         if [[ -z "${WP_INSTALL_PLUGINS}" ]]; then
@@ -95,11 +104,14 @@ PHP
         fi
 
         #Activate theme"
-        echo &>2 "Activating Theme..."
-        wp theme activate ${WP_THEME_NAME} --path=${WP_ROOT} --allow-root
+        if [ -n "${WP_THEME_NAME}" ]; then
+            echo &>2 "Activating Theme..."
+            wp theme activate ${WP_THEME_NAME} --allow-root
+        fi
 
         #Dump
-        mysqldump -u ${MYSQL_USER} -p ${MYSQL_PASSWORD} ${MYSQL_DATABASE} | gzip > ${SQL_DUMP_DATA}
+        echo &>2 "Dumping SQL Data..."
+        mysqldump -uroot --password="${MYSQL_PASSWORD}" -B ${MYSQL_DATABASE} -hmysql | gzip -9vf > ${SQL_DUMP_DATA}
     else
         echo >&2 "The Project seems to be already started."
 
