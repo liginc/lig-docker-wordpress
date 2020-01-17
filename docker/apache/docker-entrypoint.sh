@@ -109,6 +109,13 @@ PHP
             wp theme activate ${WP_THEME_NAME} --allow-root
         fi
 
+        # Delete default plugins
+        wp plugin delete akismet --allow-root
+        wp plugin delete hello --allow-root
+
+        # Delete Default theme
+        rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
+
         #Dump
         echo &>2 "Dumping SQL Data..."
         mysqldump -uroot --password="${MYSQL_PASSWORD}" -B ${MYSQL_DATABASE} -hmysql | gzip -9vf > ${SQL_DUMP_DATA}
@@ -123,13 +130,6 @@ PHP
         wp core install --path=${WP_ROOT} --allow-root \
             --skip-email
     fi
-
-    # Delete default plugins
-    wp plugin delete akismet --allow-root
-    wp plugin delete hello --allow-root
-
-    # Delete Default theme
-    rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
 else
 	echo >&2 "Wordpress seems to be installed."
 fi
