@@ -55,6 +55,7 @@ PHP
         wp option update default_comment_status 'closed' --allow-root
         wp comment delete 1 --force --allow-root
         wp post delete 1 2 3 --force --allow-root
+        wp term delete category 1 -- allow-root
 
         # Install extra plugins specified by $WP_INSTALL_PLUGINS
         if [[ -z "${WP_INSTALL_PLUGINS}" ]]; then
@@ -94,10 +95,11 @@ PHP
         fi
 
         #Activate theme"
-        if [[ -z "${WP_THEME_NAME}" ]] && [ -e ${WP_THEME_NAME} ]; then
-            echo &>2 "Activating Theme..."
-            wp theme activate ${WP_THEME_NAME} --path=${WP_ROOT} --allow-root
-        fi
+        echo &>2 "Activating Theme..."
+        wp theme activate ${WP_THEME_NAME} --path=${WP_ROOT} --allow-root
+
+        #Dump
+        mysqldump -u ${MYSQL_USER} -p ${MYSQL_PASSWORD} ${MYSQL_DATABASE} | gzip > ${SQL_DUMP_DATA}
     else
         echo >&2 "The Project seems to be already started."
 
