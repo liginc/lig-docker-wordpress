@@ -105,6 +105,7 @@ PHP
             echo "Update ewww image optimize options";
             wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
             wp option update ewww_image_optimizer_maxmediawidth '1600' --allow-root
+            wp option update ewww_image_optimizer_webp '1' --arrow-root
             wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
         fi
