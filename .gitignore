@@ -5,6 +5,7 @@
 node_modules
 guide
 *.map
+*.log
 !.keep
 !.gitkeep
 /wp/*
@@ -16,8 +17,8 @@ guide
 !/wp/wp-content/languages/plugins/
 /wp/wp-content/plugins/hello.php
 /wp/wp-content/plugins/akismet/*
+/wp/wp-content/plugins/hello.php
 !/wp/wp-content/themes/
 /wp/wp-content/themes/*
 /wp/wp-content/themes/*/assets/
-/wp/wp-content/themes/*/anticache.json
 !/wp/wp-content/themes/lig/
