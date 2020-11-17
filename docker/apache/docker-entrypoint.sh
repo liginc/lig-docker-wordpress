@@ -24,6 +24,7 @@ if [ ! -f ${WP_ROOT}/wp-config.php ]; then
 define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_DISPLAY', true );
 define( 'WP_DEBUG_LOG', true );
+define( 'WP_ENVIRONMENT_TYPE', 'develop' );
 PHP
 
     echo >&2 "Removing wp-config-sapmle.ph...p"
