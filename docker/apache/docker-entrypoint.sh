@@ -53,6 +53,9 @@ PHP
         wp option update blog_public '0' --allow-root
         wp option update default_ping_status 'closed' --allow-root
         wp option update default_comment_status 'closed' --allow-root
+        wp option uodate image_default_size 'full' --allow-root
+        wp option update thumbnail_crop '0' --allow-root
+        wp option update permalink_structure '/%postname%/' --allow-root
 
         #Truncate tables
         echo >&2 "Initializing tables..."
@@ -101,6 +104,13 @@ PHP
                 wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
             fi
 
+        if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
+            echo "Update ewww image optimize options";
+            wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
+            wp option update ewww_image_optimizer_maxmediawidth '1600' --allow-root
+            wp option update ewww_image_optimizer_webp '1' --arrow-root
+            wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
+            wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             unset "TEMP_WP_PLUGIN"
         fi
 
