@@ -82,24 +82,27 @@ PHP
                     wp plugin activate ${TEMP_WP_PLUGIN} --path=${WP_ROOT} --allow-root
                 fi
             done
-            unset "TEMP_WP_PLUGIN"
-        fi
 
-        if $(wp plugin is-installed wordpress-seo --path=${WP_ROOT} --allow-root); then
-            echo "Update yoast options";
-            YOAST_OPTION=$(wp option get wpseo --format=json --allow-root | \
-            sed -n '$p' | \
-            sed 's/"keyword_analysis_active":true/"keyword_analysis_active":false/' | \
-            sed 's/"content_analysis_active":true/"content_analysis_active":false/' | \
-            sed 's/"enable_cornerstone_content":true/"enable_cornerstone_content":false/' | \
-            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/' | \
-            sed 's/"enable_xml_sitemap":true/"enable_xml_sitemap":false/' | \
-            sed 's/"onpage_indexability":true/"onpage_indexability":false/' | \
-            sed 's/"enable_admin_bar_menu":true/"enable_admin_bar_menu":false/' | \
-            sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
-            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
-            wp option update wpseo $YOAST_OPTION --format=json --allow-root
-        fi
+            if $(wp plugin is-installed wordpress-seo --path=${WP_ROOT} --allow-root); then
+                echo "Update yoast options";
+                YOAST_OPTION=$(wp option get wpseo --format=json --allow-root | \
+                sed -n '$p' | \
+                sed 's/"keyword_analysis_active":true/"keyword_analysis_active":false/' | \
+                sed 's/"content_analysis_active":true/"content_analysis_active":false/' | \
+                sed 's/"enable_cornerstone_content":true/"enable_cornerstone_content":false/' | \
+                sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/' | \
+                sed 's/"enable_xml_sitemap":true/"enable_xml_sitemap":false/' | \
+                sed 's/"onpage_indexability":true/"onpage_indexability":false/' | \
+                sed 's/"enable_admin_bar_menu":true/"enable_admin_bar_menu":false/' | \
+                sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
+                sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
+                wp option update wpseo $YOAST_OPTION --format=json --allow-root
+            fi
+
+            if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
+                echo "Update ewww image optimize options";
+                wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
+            fi
 
         if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
             echo "Update ewww image optimize options";
@@ -108,23 +111,17 @@ PHP
             wp option update ewww_image_optimizer_webp '1' --arrow-root
             wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
+            unset "TEMP_WP_PLUGIN"
         fi
 
         #Activate theme"
         if [ -n "${WP_THEME_NAME}" ]; then
-            echo &>2 "Activating Theme..."
+            echo >&2 "Activating Theme..."
             wp theme activate ${WP_THEME_NAME} --allow-root
         fi
 
-        # Delete default plugins
-        wp plugin delete akismet --allow-root
-        wp plugin delete hello --allow-root
-
-        # Delete Default theme
-        rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
-
         #Dump
-        echo &>2 "Dumping SQL Data..."
+        echo >&2 "Dumping SQL Data..."
         mysqldump -uroot --password="${MYSQL_PASSWORD}" -B ${MYSQL_DATABASE} -hmysql | gzip -9vf > ${SQL_DUMP_DATA}
     else
         echo >&2 "The Project seems to be already started."
@@ -137,6 +134,24 @@ PHP
         wp core install --path=${WP_ROOT} --allow-root \
             --skip-email
     fi
+
+    # Delete default plugins
+    if [ -d ${WP_ROOT}/wp-content/plugins/akismet ]; then
+        echo >&2 "Remove Akismet"
+        wp plugin delete akismet --allow-root
+    fi
+    if [ -e ${WP_ROOT}/wp-content/plugins/hello.php ]; then
+        echo >&2 "Remove Hello Dolly"
+        wp plugin delete hello --allow-root
+    fi
+
+    # Delete Default theme
+    ls ${WP_ROOT}/wp-content/themes/twenty* >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo >&2 "Remove Default Themes"
+        rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
+    fi
+
 else
 	echo >&2 "Wordpress seems to be installed."
 fi
