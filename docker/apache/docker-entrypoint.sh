@@ -6,6 +6,7 @@ echo >&2 "MySQL database is now ready to handle connection."
 
 # Download and Install WordPress
 if [ ! -f ${WP_ROOT}/wp-config.php ]; then
+
 	echo >&2 "Downloading Wordpress files..."
 	wp core download --path=${WP_ROOT} --allow-root --version=${WP_VERSION}
 
@@ -101,17 +102,15 @@ PHP
             fi
 
             if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
+
                 echo "Update ewww image optimize options";
                 wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
+                wp option update ewww_image_optimizer_maxmediawidth '1600' --allow-root
+                wp option update ewww_image_optimizer_webp '1' --arrow-root
+                wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
+                wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             fi
 
-        if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
-            echo "Update ewww image optimize options";
-            wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
-            wp option update ewww_image_optimizer_maxmediawidth '1600' --allow-root
-            wp option update ewww_image_optimizer_webp '1' --arrow-root
-            wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
-            wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             unset "TEMP_WP_PLUGIN"
         fi
 
@@ -124,7 +123,9 @@ PHP
         #Dump
         echo >&2 "Dumping SQL Data..."
         mysqldump -uroot --password="${MYSQL_PASSWORD}" -B ${MYSQL_DATABASE} -hmysql | gzip -9vf > ${SQL_DUMP_DATA}
+
     else
+
         echo >&2 "The Project seems to be already started."
 
         echo >&2 "Installing Japanese language file..."
