@@ -26,6 +26,7 @@ define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_DISPLAY', true );
 define( 'WP_DEBUG_LOG', true );
 define( 'WP_ENVIRONMENT_TYPE', 'development' );
+define( 'MWFORM_DEBUG', true );
 PHP
 
     echo >&2 "Removing wp-config-sapmle.ph...p"
@@ -99,16 +100,6 @@ PHP
                 sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
                 sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
                 wp option update wpseo $YOAST_OPTION --format=json --allow-root
-            fi
-
-            if $(wp plugin is-installed ewww-image-optimizer --path=${WP_ROOT} --allow-root); then
-
-                echo "Update ewww image optimize options";
-                wp option update ewww_image_optimizer_jpg_quality 75 --allow-root
-                wp option update ewww_image_optimizer_maxmediawidth '1600' --allow-root
-                wp option update ewww_image_optimizer_webp '1' --arrow-root
-                wp option update ewww_image_optimizer_disable_resizes 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
-                wp option update ewww_image_optimizer_disable_resizes_opt 'a:5:{s:6:"medium";s:4:"true";s:12:"medium_large";s:4:"true";s:5:"large";s:4:"true";s:9:"1536x1536";s:4:"true";s:9:"2048x2048";s:4:"true";}' --allow-root
             fi
 
             unset "TEMP_WP_PLUGIN"
