@@ -9,6 +9,7 @@ guide
 !.keep
 !.gitkeep
 /wp/*
+!/wp/.htaccess
 !/wp/wp-content/
 /wp/wp-content/*
 !/wp/wp-content/plugins/

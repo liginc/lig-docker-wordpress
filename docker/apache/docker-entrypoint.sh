@@ -145,6 +145,32 @@ PHP
         rm -Rf ${WP_ROOT}/wp-content/themes/twenty*
     fi
 
+    if [ ! -e ${WP_ROOT}/.htaccess ]; then
+	{ \
+		echo '# BEGIN Upload file limit'; \
+		echo ''; \
+		echo 'php_value upload_max_filesize 512M'; \
+		echo 'php_value post_max_size 512M /'; \
+		echo 'php_value memory_limit 512M'; \
+		echo 'php_value max_execution_time 600'; \
+		echo 'php_value max_input_time 600'; \
+		echo ''; \
+		echo '# END Upload file limit'; \
+		echo ''; \
+		echo ''; \
+		echo '# BEGIN WordPress'; \
+		echo ''; \
+		echo 'RewriteEngine On'; \
+		echo 'RewriteBase /'; \
+		echo 'RewriteRule ^index\.php$ - [L]'; \
+		echo 'RewriteCond %{REQUEST_FILENAME} !-f'; \
+		echo 'RewriteCond %{REQUEST_FILENAME} !-d'; \
+		echo 'RewriteRule . /index.php [L]'; \
+		echo ''; \
+		echo '# END WordPress'; \
+	} > ${WP_ROOT}/.htaccess;
+    fi
+
 else
 	echo >&2 "Wordpress seems to be installed."
 fi
