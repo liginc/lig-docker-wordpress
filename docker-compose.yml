@@ -16,6 +16,7 @@ services:
     env_file: .env
     build:
       context: ./docker/apache
+      dockerfile: php-${PHP_VER}.Dockerfile
       args:
         PHP_VER: ${PHP_VER}
     depends_on:
