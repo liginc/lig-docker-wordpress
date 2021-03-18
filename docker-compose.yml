@@ -19,6 +19,8 @@ services:
       dockerfile: php-${PHP_VER}.Dockerfile
       args:
         PHP_VER: ${PHP_VER}
+    cap_add:
+      - SYS_NICE
     depends_on:
       - mysql
     ports:
