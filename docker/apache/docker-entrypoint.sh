@@ -56,7 +56,7 @@ PHP
         wp option update blog_public '0' --allow-root
         wp option update default_ping_status 'closed' --allow-root
         wp option update default_comment_status 'closed' --allow-root
-        wp option uodate image_default_size 'full' --allow-root
+        wp option update image_default_size 'full' --allow-root
         wp option update thumbnail_crop '0' --allow-root
         wp option update permalink_structure '/%postname%/' --allow-root
 
@@ -150,7 +150,7 @@ PHP
 		echo '# BEGIN Upload file limit'; \
 		echo ''; \
 		echo 'php_value upload_max_filesize 512M'; \
-		echo 'php_value post_max_size 512M /'; \
+		echo 'php_value post_max_size 512M'; \
 		echo 'php_value memory_limit 512M'; \
 		echo 'php_value max_execution_time 600'; \
 		echo 'php_value max_input_time 600'; \
@@ -161,6 +161,7 @@ PHP
 		echo '# BEGIN WordPress'; \
 		echo ''; \
 		echo 'RewriteEngine On'; \
+		echo 'RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]'; \
 		echo 'RewriteBase /'; \
 		echo 'RewriteRule ^index\.php$ - [L]'; \
 		echo 'RewriteCond %{REQUEST_FILENAME} !-f'; \
