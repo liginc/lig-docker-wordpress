@@ -7,6 +7,8 @@ services:
       context: ./docker/mysql
       args:
         MYSQL_VER: ${MYSQL_VER}
+    cap_add:
+      - SYS_NICE
     ports:
       - 3306:3306
     volumes:
@@ -19,8 +21,6 @@ services:
       dockerfile: php-${PHP_VER}.Dockerfile
       args:
         PHP_VER: ${PHP_VER}
-    cap_add:
-      - SYS_NICE
     depends_on:
       - mysql
     ports:
