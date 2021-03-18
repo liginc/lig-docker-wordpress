@@ -56,7 +56,7 @@ PHP
         wp option update blog_public '0' --allow-root
         wp option update default_ping_status 'closed' --allow-root
         wp option update default_comment_status 'closed' --allow-root
-        wp option uodate image_default_size 'full' --allow-root
+        wp option update image_default_size 'full' --allow-root
         wp option update thumbnail_crop '0' --allow-root
         wp option update permalink_structure '/%postname%/' --allow-root
 
