@@ -86,3 +86,8 @@ apacheのデバッグログ
 MW WP Form利用時にメールの送信をキャンセルし、送信内容のログを残す
 
 
+### WP_ENVIRONMENT_TYPE
+初回起動時、`wp-config.php`に`WP_ENVIRONMENT_TYPE`が`local`の直で設定される
+
+`wp_get_environment_type()`を利用して現在の環境を取得できる
+
