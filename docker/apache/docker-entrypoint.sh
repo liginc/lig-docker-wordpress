@@ -81,28 +81,42 @@ PHP
                 echo >&2 "Installing extra plugin ${TEMP_WP_PLUGIN}..."
                 if ! $(wp plugin is-installed ${TEMP_WP_PLUGIN} --path=${WP_ROOT} --allow-root); then
                     wp plugin install ${TEMP_WP_PLUGIN} --path=${WP_ROOT} --allow-root
-                    echo >&2 "Activating plugins..."
+                fi
+            done
+
+            unset "TEMP_WP_PLUGIN"
+        fi
+
+        # Activate extra plugins specified by $WP_ACTIVATE_PLUGINS
+        if [[ -z "${WP_ACTIVATE_PLUGINS}" ]]; then
+            echo >&2 "env var \$WP_ACTIVATE_PLUGINS is empty - skipping activating extra plugins";
+        else
+            for TEMP_WP_PLUGIN in $WP_ACTIVATE_PLUGINS; do
+                echo >&2 "Activating extra plugin ${TEMP_WP_PLUGIN}..."
+                if $(wp plugin is-installed ${TEMP_WP_PLUGIN} --path=${WP_ROOT} --allow-root); then
                     wp plugin activate ${TEMP_WP_PLUGIN} --path=${WP_ROOT} --allow-root
                 fi
             done
 
-            if $(wp plugin is-installed wordpress-seo --path=${WP_ROOT} --allow-root); then
-                echo "Update yoast options";
-                YOAST_OPTION=$(wp option get wpseo --format=json --allow-root | \
-                sed -n '$p' | \
-                sed 's/"keyword_analysis_active":true/"keyword_analysis_active":false/' | \
-                sed 's/"content_analysis_active":true/"content_analysis_active":false/' | \
-                sed 's/"enable_cornerstone_content":true/"enable_cornerstone_content":false/' | \
-                sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/' | \
-                sed 's/"enable_xml_sitemap":true/"enable_xml_sitemap":false/' | \
-                sed 's/"onpage_indexability":true/"onpage_indexability":false/' | \
-                sed 's/"enable_admin_bar_menu":true/"enable_admin_bar_menu":false/' | \
-                sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
-                sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
-                wp option update wpseo $YOAST_OPTION --format=json --allow-root
-            fi
-
             unset "TEMP_WP_PLUGIN"
+        fi
+
+        # Setup plugin options
+        echo >&2 "Setup plugin options..."
+        if $(wp plugin is-installed wordpress-seo --path=${WP_ROOT} --allow-root); then
+            echo "Update yoast options";
+            YOAST_OPTION=$(wp option get wpseo --format=json --allow-root | \
+            sed -n '$p' | \
+            sed 's/"keyword_analysis_active":true/"keyword_analysis_active":false/' | \
+            sed 's/"content_analysis_active":true/"content_analysis_active":false/' | \
+            sed 's/"enable_cornerstone_content":true/"enable_cornerstone_content":false/' | \
+            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/' | \
+            sed 's/"enable_xml_sitemap":true/"enable_xml_sitemap":false/' | \
+            sed 's/"onpage_indexability":true/"onpage_indexability":false/' | \
+            sed 's/"enable_admin_bar_menu":true/"enable_admin_bar_menu":false/' | \
+            sed 's/"show_onboarding_notice":true/"show_onboarding_notice":false/' | \
+            sed 's/"enable_text_link_counter":true/"enable_text_link_counter":false/') && \
+            wp option update wpseo $YOAST_OPTION --format=json --allow-root
         fi
 
         #Activate theme"
@@ -189,6 +203,7 @@ envs=(
 	WP_ADMIN_EMAIL
 	WP_THEME_NAME
 	WP_INSTALL_PLUGINS
+	WP_ACTIVATE_PLUGINS
 )
 
 # now that we're definitely done writing configuration, let's clear out the relevant envrionment variables (so that stray "phpinfo()" calls don't leak secrets from our code)
