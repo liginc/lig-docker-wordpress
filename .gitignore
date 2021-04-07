@@ -1,6 +1,8 @@
 .idea
-.sass-cache
+.atom
+.vscode
 .DS_Store
+.sass-cache
 .env
 node_modules
 guide
@@ -22,4 +24,3 @@ guide
 !/wp/wp-content/themes/
 /wp/wp-content/themes/*
 /wp/wp-content/themes/*/assets/
-!/wp/wp-content/themes/lig/
