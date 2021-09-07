@@ -1,10 +1,15 @@
 # LIG WordPress Docker Files
 
 **Repository URI:** https://github.com/liginc/lig-docker-wordpress
+
 **Contributors:** LIG inc  
+
 **Requires at least:** docker engine 20.10
+
 **Version:** 0.1 
+
 **License:** GPLv2 or later  
+
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html 
 
 ## Description
@@ -35,27 +40,42 @@ Source: https://necolas.github.io/normalize.css/
 
 ## Environment Setup
 
-1. Copy `.env-sample` to `.env`.
-1. Set up `.env`
+Copy `.env-sample` to `.env`.
 
 ## Environment Variables
 
 **PHP_VER:** PHPバージョン（8.0, 7.4, 7.3）
+
 **MYSQL_VER:** PHPバージョン（8.0, 5.7, 5.6） 
-**MYSQL_ROOT_PASSWORD:** WordPressをインストールするデータベースのユーザーパスワード  
+
+**MYSQL_ROOT_PASSWORD:** WordPressをインストールするデータベースのユーザーパスワード 
+
 **MYSQL_PASSWORD:**  
+
 **MYSQL_DATABASE:** WordPressをインストールするデータベース名 
+
 **MYSQL_USER:** WordPressをインストールするデータベースのユーザー名 
+
 **SQL_DUMP_DATA:** コンテナ起動時にロードされるSQLファイル（.gzを推奨） 
+
 **WP_VERSION:** インストールするWordPressのバージョン 
+
 **WP_URL:** 初回起動時にWP_SITEURL、WP_HOMEに設定されるURL
+
 **WP_ROOT:** WordPressがインストールされるdocker上の絶対パス 
+
 **WP_DB_PREFIX:** 初回起動時に設定されるWordPressがインストールされるテーブルのプリフィックス 
+
 **WP_ADMIN_USER:** 初回起動時に設定されるWordPressの管理者ユーザー名 
+
 **WP_ADMIN_PASSWORD:** 初回起動時に設定されるWordPressの管理者ユーザーパスワード 
+
 **WP_ADMIN_EMAIL:** 初回起動時に設定されるWordPressの管理者ユーザーemailアドレス 
+
 **WP_INSTALL_PLUGINS:** 初回起動時にインストールされるプラグイン（半角スペースで複数設定できる） 
+
 **WP_ACTIVATE_PLUGINS:** 初回起動時に有効化されるプラグイン（半角スペースで複数設定できる）
+
 **WP_THEME_NAME:** 使用するテーマのディレクトリ名 
 
 ## Commands
