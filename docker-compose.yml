@@ -13,6 +13,7 @@ services:
       - 3306:3306
     volumes:
       - ./sql:/docker-entrypoint-initdb.d:rw
+    platform: linux/x86_64
 
   web:
     env_file: .env
